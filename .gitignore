@@ -12,3 +12,4 @@ genos
 .vscode/
 .grifter/
 .env
+package-lock.json
