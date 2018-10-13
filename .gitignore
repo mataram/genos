@@ -1,3 +1,4 @@
+.DS_Store
 vendor/
 **/*.log
 **/*.sqlite
@@ -12,3 +13,4 @@ genos
 .vscode/
 .grifter/
 .env
+package-lock.json
