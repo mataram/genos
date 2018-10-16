@@ -19,6 +19,7 @@ type Service struct {
 	Status      int          `json:"status" db:"status"`
 	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
+	Events		Events		 `has_many:"events" order_by:"name asc"`
 }
 
 // String is not required by pop and may be deleted
