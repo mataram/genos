@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>Edit Service</h1>
+</div>
+
+<%= form_for(service, {action: servicePath({ service_id: service.ID }), method: "PUT"}) { %>
+  <%= partial("services/form.html") %>
+  <a href="<%= servicePath({ service_id: service.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

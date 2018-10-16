@@ -1,0 +1,6 @@
+- id: "service.created.success"
+  translation: "Service was successfully created."
+- id: "service.updated.success"
+  translation: "Service was successfully updated."
+- id: "service.destroyed.success"
+  translation: "Service was successfully destroyed."
