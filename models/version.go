@@ -18,6 +18,7 @@ type Version struct {
 	Output    string    `json:"output" db:"output"`
 	Schema    string    `json:"schema" db:"schema"`
 	Status    int       `json:"status" db:"status"`
+	EventID   uuid.UUID `json:"event_id" db:"event_id"`
 }
 
 // String is not required by pop and may be deleted

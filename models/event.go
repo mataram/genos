@@ -20,6 +20,7 @@ type Event struct {
 	Description nulls.String `json:"description" db:"description"`
 	Status      int          `json:"status" db:"status"`
 	Service     Service      `belongs_to:"service"`
+	Versions    Versions     `has_many:"versions" order_by:"name asc"`
 }
 
 func (e Event) GetBreadcumbs() []Breadcrumb {
