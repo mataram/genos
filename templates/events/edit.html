@@ -2,7 +2,7 @@
   <h1>Edit Event</h1>
 </div>
 
-<%= form_for(event, {action: eventPath({ event_id: event.ID }), method: "PUT"}) { %>
+<%= form_for(event, {action: serviceEventPath({ service_id: event.ServiceID, event_id: event.ID }), method: "PUT"}) { %>
   <%= partial("events/form.html") %>
-  <a href="<%= eventPath({ event_id: event.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+  <a href="<%= serviceEventPath({ service_id: event.ServiceID, event_id: event.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
 <% } %>

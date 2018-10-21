@@ -2,13 +2,13 @@
   <h1>Events</h1>
 </div>
 <ul class="list-unstyled list-inline">
-  <li><a href="<%= newEventsPath() %>" class="btn btn-primary">Create New Event</a></li>
+  <li><a href="<%= newServiceEventsPath({ service_id: service.ID }) %>" class="btn btn-primary">Create New Event</a></li>
 </ul>
 
 <table class="table table-striped">
   <thead>
   <th>Name</th>
-    <th>EventID</th>
+    <th>ServiceID</th>
     <th>Status</th>
     <th>&nbsp;</th>
   </thead>
@@ -16,13 +16,13 @@
     <%= for (event) in events { %>
       <tr>
       <td><%= event.Name %></td>
-        <td><%= event.EventID %></td>
+        <td><%= event.ServiceID %></td>
         <td><%= event.Status %></td>
         <td>
           <div class="pull-right">
-            <a href="<%= eventPath({ event_id: event.ID }) %>" class="btn btn-info">View</a>
-            <a href="<%= editEventPath({ event_id: event.ID }) %>" class="btn btn-warning">Edit</a>
-            <a href="<%= eventPath({ event_id: event.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            <a href="<%= serviceEventPath({ service_id: service.ID, event_id: event.ID }) %>" class="btn btn-info">View</a>
+            <a href="<%= editServiceEventPath({ service_id: service.ID, event_id: event.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= serviceEventPath({ service_id: service.ID, event_id: event.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
           </div>
         </td>
       </tr>

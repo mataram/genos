@@ -1,8 +1,11 @@
 package actions
 
 import (
+	"net/http"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/uuid"
 	"github.com/mataram/genos/models"
 	"github.com/pkg/errors"
 )
@@ -46,6 +49,10 @@ func (v EventsResource) List(c buffalo.Context) error {
 
 	// Add the paginator to the context so it can be used in the template.
 	c.Set("pagination", q.Paginator)
+	breadcrumbs := []models.Breadcrumb{}
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/", "Home"})
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/events", "Events"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	return c.Render(200, r.Auto(c, events))
 }
@@ -67,13 +74,31 @@ func (v EventsResource) Show(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	tx.Find(event.Service, c.Param("service_id"))
+	breadcrumbs := event.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Show"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	return c.Render(200, r.Auto(c, event))
 }
 
 // New renders the form for creating a new Event.
 // This function is mapped to the path GET /events/new
 func (v EventsResource) New(c buffalo.Context) error {
-	return c.Render(200, r.Auto(c, &models.Event{}))
+	event := &models.Event{}
+	serviceId, err := uuid.FromString(c.Param("service_id"))
+
+	if err == nil {
+		event.ServiceID = serviceId
+	} else {
+		return errors.WithStack(err)
+	}
+
+	breadcrumbs := event.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "New"})
+	c.Set("breadcrumbs", breadcrumbs)
+
+	return c.Render(200, r.Auto(c, event))
 }
 
 // Create adds a Event to the DB. This function is mapped to the
@@ -81,6 +106,9 @@ func (v EventsResource) New(c buffalo.Context) error {
 func (v EventsResource) Create(c buffalo.Context) error {
 	// Allocate an empty Event
 	event := &models.Event{}
+	breadcrumbs := event.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Create"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	// Bind event to the html form elements
 	if err := c.Bind(event); err != nil {
@@ -131,6 +159,10 @@ func (v EventsResource) Edit(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	breadcrumbs := event.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Edit"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	return c.Render(200, r.Auto(c, event))
 }
 
@@ -171,6 +203,9 @@ func (v EventsResource) Update(c buffalo.Context) error {
 
 	// If there are no errors set a success message
 	c.Flash().Add("success", "Event was updated successfully")
+	breadcrumbs := event.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Update"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	// and redirect to the events index page
 	return c.Render(200, r.Auto(c, event))
@@ -201,5 +236,5 @@ func (v EventsResource) Destroy(c buffalo.Context) error {
 	c.Flash().Add("success", "Event was destroyed successfully")
 
 	// Redirect to the events index page
-	return c.Render(200, r.Auto(c, event))
+	return c.Redirect(http.StatusFound, "/services/"+c.Param("service_id"))
 }

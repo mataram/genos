@@ -19,7 +19,14 @@ type Service struct {
 	Status      int          `json:"status" db:"status"`
 	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
-	Events		Events		 `has_many:"events" order_by:"name asc"`
+	Events      Events       `has_many:"events" order_by:"name asc"`
+}
+
+func (s Service) GetBreadcumbs() []Breadcrumb {
+	breadcrumbs := []Breadcrumb{}
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/", "Home"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services", "Services"})
+	return breadcrumbs
 }
 
 // String is not required by pop and may be deleted

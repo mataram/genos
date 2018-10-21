@@ -47,6 +47,11 @@ func (v ServicesResource) List(c buffalo.Context) error {
 	// Add the paginator to the context so it can be used in the template.
 	c.Set("pagination", q.Paginator)
 
+	breadcrumbs := []models.Breadcrumb{}
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/", "Home"})
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/services", "Services"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	return c.Render(200, r.Auto(c, services))
 }
 
@@ -61,9 +66,17 @@ func (v ServicesResource) Show(c buffalo.Context) error {
 
 	// Allocate an empty Service
 	service := &models.Service{}
+	breadcrumbs := service.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Show"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	// To find the Service the parameter service_id is used.
 	if err := tx.Find(service, c.Param("service_id")); err != nil {
+		return c.Error(404, err)
+	}
+
+	// To find the Service the parameter service_id is used.
+	if err := tx.Load(service); err != nil {
 		return c.Error(404, err)
 	}
 
@@ -73,7 +86,13 @@ func (v ServicesResource) Show(c buffalo.Context) error {
 // New renders the form for creating a new Service.
 // This function is mapped to the path GET /services/new
 func (v ServicesResource) New(c buffalo.Context) error {
-	return c.Render(200, r.Auto(c, &models.Service{}))
+
+	service := &models.Service{}
+	breadcrumbs := service.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "New"})
+	c.Set("breadcrumbs", breadcrumbs)
+
+	return c.Render(200, r.Auto(c, service))
 }
 
 // Create adds a Service to the DB. This function is mapped to the
@@ -81,6 +100,9 @@ func (v ServicesResource) New(c buffalo.Context) error {
 func (v ServicesResource) Create(c buffalo.Context) error {
 	// Allocate an empty Service
 	service := &models.Service{}
+	breadcrumbs := service.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Create"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	// Bind service to the html form elements
 	if err := c.Bind(service); err != nil {
@@ -131,6 +153,10 @@ func (v ServicesResource) Edit(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	breadcrumbs := service.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Edit"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	return c.Render(200, r.Auto(c, service))
 }
 
@@ -171,6 +197,9 @@ func (v ServicesResource) Update(c buffalo.Context) error {
 
 	// If there are no errors set a success message
 	c.Flash().Add("success", "Service was updated successfully")
+	breadcrumbs := service.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Update"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	// and redirect to the services index page
 	return c.Render(200, r.Auto(c, service))
@@ -179,6 +208,10 @@ func (v ServicesResource) Update(c buffalo.Context) error {
 // Destroy deletes a Service from the DB. This function is mapped
 // to the path DELETE /services/{service_id}
 func (v ServicesResource) Destroy(c buffalo.Context) error {
+	breadcrumbs := []models.Breadcrumb{}
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/", "Home"})
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/services", "Services"})
+
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {

@@ -7,7 +7,9 @@
   <li class="list-inline-item"><a href="<%= editServicePath({ service_id: service.ID })%>" class="btn btn-warning">Edit</a></li>
   <li class="list-inline-item"><a href="<%= servicePath({ service_id: service.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
 </ul>
-
+<p>
+  <strong>ID</strong>: <%= service.ID %>
+</p>
 <p>
   <strong>Name</strong>: <%= service.Name %>
 </p>
@@ -17,3 +19,40 @@
 <p>
   <strong>Description</strong>: <%= service.Description %>
 </p>
+<hr>
+<br><br>
+
+
+<div class="page-header">
+  <h2>Events</h2>
+</div>
+<ul class="list-unstyled list-inline">
+  <li><a href="<%= newServiceEventsPath({ service_id: service.ID }) %>" class="btn btn-primary">Create New Event</a></li>
+</ul>
+
+<table class="table table-striped">
+  <thead>
+  <th>Name</th>
+    <th>Status</th>
+    <th>&nbsp;</th>
+  </thead>
+  <tbody>
+    <%= for (event) in service.Events { %>
+      <tr>
+      <td><%= event.Name %></td>
+      <%= if (event.Status == 1) { %>
+        <td>Active</td>
+      <% } else { %>
+        <td>Inactive</td>
+      <% } %>
+        <td>
+          <div class="pull-right">
+            <a href="/services/<%= service.ID %>/events/<%= event.ID %>" class="btn btn-info">View</a>
+            <a href="<%= editServiceEventPath({ service_id: service.ID, event_id: event.ID }) %>" class="btn btn-warning">Edit</a>
+            <a href="<%= serviceEventPath({ service_id: service.ID, event_id: event.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+          </div>
+        </td>
+      </tr>
+    <% } %>
+  </tbody>
+</table>

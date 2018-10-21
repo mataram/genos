@@ -2,12 +2,13 @@ package models
 
 import (
 	"encoding/json"
+	"time"
+
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/pop/nulls"
 	"github.com/gobuffalo/uuid"
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
-	"time"
 )
 
 type Event struct {
@@ -15,10 +16,21 @@ type Event struct {
 	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
 	Name        string       `json:"name" db:"name"`
-	ServiceID   uuid.UUID 	 `json:"service_id" db:"service_id"`
+	ServiceID   uuid.UUID    `json:"service_id" db:"service_id"`
 	Description nulls.String `json:"description" db:"description"`
 	Status      int          `json:"status" db:"status"`
-	Service		Service		 `belongs_to:"service"`
+	Service     Service      `belongs_to:"service"`
+}
+
+func (e Event) GetBreadcumbs() []Breadcrumb {
+	breadcrumbs := []Breadcrumb{}
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/", "Home"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services", "Service"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services/" + e.ServiceID.String(), e.ServiceID.String()})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"#", "Events"})
+
+	return breadcrumbs
+
 }
 
 // String is not required by pop and may be deleted
