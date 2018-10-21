@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>Edit Version</h1>
+</div>
+
+<%= form_for(version, {action: versionPath({ version_id: version.ID }), method: "PUT"}) { %>
+  <%= partial("versions/form.html") %>
+  <a href="<%= versionPath({ version_id: version.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>
