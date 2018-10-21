@@ -15,6 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <meta name="description" content="Genos - Datalake Management System">
     <meta name="author" content="Supardi">
+    <meta name="csrf-param" content="authenticity_token" />
+    <meta name="csrf-token" content="<%= authenticity_token %>" />
     <title>Genos Datalake Management</title>
     <!-- Icons-->
     
@@ -100,11 +102,15 @@
       <main class="main">
         <!-- Breadcrumb-->
         <ol class="breadcrumb">
-          <li class="breadcrumb-item">Home</li>
-          <li class="breadcrumb-item">
-            <a href="#">Admin</a>
-          </li>
-          <li class="breadcrumb-item active">Dashboard</li>
+          <%= for (b) in breadcrumbs { %>
+              <%=  if (b.Path == "#") { %>
+            
+            <li class="breadcrumb-item"><%= b.Name %></li>
+          <% } else { %>
+            <li class="breadcrumb-item">
+              <a href="<%= b.Path %>"><%= b.Name %></a>
+            </li>
+          <% } } %>
           <!-- Breadcrumb Menu-->
         </ol>
         <div class="container-fluid">

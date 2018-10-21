@@ -11,55 +11,60 @@ import (
 	"github.com/gobuffalo/validate/validators"
 )
 
-type Service struct {
+type Event struct {
 	ID          uuid.UUID    `json:"id" db:"id"`
-	Prefix      string       `json:"prefix" db:"prefix"`
-	Name        string       `json:"name" db:"name"`
-	Description nulls.String `json:"description" db:"description"`
-	Status      int          `json:"status" db:"status"`
 	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
-	Events      Events       `has_many:"events" order_by:"name asc"`
+	Name        string       `json:"name" db:"name"`
+	ServiceID   uuid.UUID    `json:"service_id" db:"service_id"`
+	Description nulls.String `json:"description" db:"description"`
+	Status      int          `json:"status" db:"status"`
+	Service     Service      `belongs_to:"service"`
 }
 
-func (s Service) GetBreadcumbs() []Breadcrumb {
+func (e Event) GetBreadcumbs() []Breadcrumb {
 	breadcrumbs := []Breadcrumb{}
 	breadcrumbs = append(breadcrumbs, Breadcrumb{"/", "Home"})
-	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services", "Services"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services", "Service"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services/" + e.ServiceID.String(), e.ServiceID.String()})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"#", "Events"})
+
 	return breadcrumbs
+
 }
 
 // String is not required by pop and may be deleted
-func (s Service) String() string {
-	js, _ := json.Marshal(s)
-	return string(js)
+func (e Event) String() string {
+	je, _ := json.Marshal(e)
+	return string(je)
 }
 
-// Services is not required by pop and may be deleted
-type Services []Service
+// Events is not required by pop and may be deleted
+type Events []Event
 
 // String is not required by pop and may be deleted
-func (s Services) String() string {
-	js, _ := json.Marshal(s)
-	return string(js)
+func (e Events) String() string {
+	je, _ := json.Marshal(e)
+	return string(je)
 }
 
 // Validate gets run every time you call a "pop.Validate*" (pop.ValidateAndSave, pop.ValidateAndCreate, pop.ValidateAndUpdate) method.
 // This method is not required and may be deleted.
-func (s *Service) Validate(tx *pop.Connection) (*validate.Errors, error) {
+func (e *Event) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.Validate(
-		&validators.StringIsPresent{Field: s.Name, Name: "Name"},
+		&validators.StringIsPresent{Field: e.Name, Name: "Name"},
+		&validators.IntIsPresent{Field: e.Status, Name: "Status"},
 	), nil
 }
 
 // ValidateCreate gets run every time you call "pop.ValidateAndCreate" method.
 // This method is not required and may be deleted.
-func (s *Service) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
+func (e *Event) ValidateCreate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }
 
 // ValidateUpdate gets run every time you call "pop.ValidateAndUpdate" method.
 // This method is not required and may be deleted.
-func (s *Service) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
+func (e *Event) ValidateUpdate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.NewErrors(), nil
 }

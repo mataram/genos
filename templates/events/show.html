@@ -1,0 +1,25 @@
+<div class="page-header">
+  <h1>Event#Show</h1>
+</div>
+<ul class="list-unstyled list-inline">
+  <a href="<%= editServiceEventPath({ service_id: event.ServiceID, event_id: event.ID }) %>" class="btn btn-warning">Edit</a>
+  <a href="<%= serviceEventPath({ service_id: event.ServiceID, event_id: event.ID, csrf: authenticity_token }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+</ul>
+
+<p>
+  <strong>Name</strong>: <%= event.Name %>
+</p>
+<p>
+  <strong>EventID</strong>: <%= event.ServiceID %>
+</p>
+<p>
+  <strong>Description</strong>: <%= event.Description %>
+</p>
+<p>
+  <strong>Status</strong>: 
+  <%= if (event.Status == 1) { %>
+    Active
+  <% } else { %>
+    Inactive
+  <% } %>
+</p>

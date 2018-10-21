@@ -1,0 +1,8 @@
+create_table("events") {
+	t.Column("id", "uuid", {"primary": true})
+	t.Column("name", "string", {})
+	t.Column("service_id", "uuid", {})
+	t.Column("description", "text", {"null": true})
+	t.Column("status", "integer", {})
+	t.ForeignKey("service_id", {"services": ["id"]}, {"on_delete": "cascade"})
+}
