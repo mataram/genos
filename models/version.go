@@ -19,6 +19,19 @@ type Version struct {
 	Schema    string    `json:"schema" db:"schema"`
 	Status    int       `json:"status" db:"status"`
 	EventID   uuid.UUID `json:"event_id" db:"event_id"`
+	Event     Event     `belongs_to:"event"`
+}
+
+func (e Version) GetBreadcumbs() []Breadcrumb {
+	breadcrumbs := []Breadcrumb{}
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/", "Home"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services", "Services"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services/" + e.Event.ServiceID.String(), e.Event.ServiceID.String()})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"#", "Events"})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services/" + e.Event.ServiceID.String() + "/events/" + e.EventID.String(), e.EventID.String()})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"#", "Versions"})
+	return breadcrumbs
+
 }
 
 // String is not required by pop and may be deleted
