@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>New Version</h1>
+</div>
+
+<%= form_for(version, {action: serviceEventVersionsPath( { service_id: version.Event.ServiceID, event_id: version.EventID } ), method: "POST"}) { %>
+  <%= partial("versions/form.html") %>
+  <a href="<%= serviceEventPath( { service_id: version.Event.ServiceID, event_id: version.EventID } ) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

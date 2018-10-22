@@ -5,3 +5,4 @@ create_table("services") {
 	t.Column("prefix", "string", {"size":100})
 	t.Column("status", "integer", {})
 }
+add_index("services", "name", {"unique": true})

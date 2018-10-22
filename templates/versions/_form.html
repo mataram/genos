@@ -1,0 +1,6 @@
+<%= f.HiddenTag("EventID") %>
+<%= f.InputTag("Name") %>
+<%= f.InputTag("Output") %>
+<%= f.TextAreaTag("Schema", {rows: 10}) %>
+<%= f.SelectTag("Status", {options: {"Active": "1", "Inactive": "-1"}}) %>
+<button class="btn btn-success" role="submit">Save</button>
