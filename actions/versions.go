@@ -3,6 +3,7 @@ package actions
 import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/uuid"
 	"github.com/mataram/genos/models"
 	"github.com/pkg/errors"
 )
@@ -67,13 +68,43 @@ func (v VersionsResource) Show(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	tx.Find(&version.Event, c.Param("event_id"))
+	tx.Find(&version.Event.Service, version.Event.ServiceID)
+	breadcrumbs := version.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Show"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	return c.Render(200, r.Auto(c, version))
 }
 
 // New renders the form for creating a new Version.
 // This function is mapped to the path GET /versions/new
 func (v VersionsResource) New(c buffalo.Context) error {
-	return c.Render(200, r.Auto(c, &models.Version{}))
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	version := &models.Version{}
+	eventId, err := uuid.FromString(c.Param("event_id"))
+
+	if err == nil {
+		version.EventID = eventId
+	} else {
+		return errors.WithStack(err)
+	}
+
+	// To find the Event the parameter event_id is used.
+	if err := tx.Find(&version.Event, c.Param("event_id")); err != nil {
+		return c.Error(404, err)
+	}
+
+	tx.Find(&version.Event.Service, version.Event.ServiceID)
+	breadcrumbs := version.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "New"})
+	c.Set("breadcrumbs", breadcrumbs)
+
+	return c.Render(200, r.Auto(c, version))
 }
 
 // Create adds a Version to the DB. This function is mapped to the

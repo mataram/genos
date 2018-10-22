@@ -78,6 +78,7 @@ func (v EventsResource) Show(c buffalo.Context) error {
 	breadcrumbs := event.GetBreadcumbs()
 	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Show"})
 	c.Set("breadcrumbs", breadcrumbs)
+	tx.Load(event)
 
 	return c.Render(200, r.Auto(c, event))
 }
@@ -85,6 +86,11 @@ func (v EventsResource) Show(c buffalo.Context) error {
 // New renders the form for creating a new Event.
 // This function is mapped to the path GET /events/new
 func (v EventsResource) New(c buffalo.Context) error {
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
 	event := &models.Event{}
 	serviceId, err := uuid.FromString(c.Param("service_id"))
 
@@ -97,6 +103,10 @@ func (v EventsResource) New(c buffalo.Context) error {
 	breadcrumbs := event.GetBreadcumbs()
 	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "New"})
 	c.Set("breadcrumbs", breadcrumbs)
+	// To load all references and relattions
+	if err := tx.Load(event); err != nil {
+		return c.Error(404, err)
+	}
 
 	return c.Render(200, r.Auto(c, event))
 }
