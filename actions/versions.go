@@ -47,6 +47,10 @@ func (v VersionsResource) List(c buffalo.Context) error {
 
 	// Add the paginator to the context so it can be used in the template.
 	c.Set("pagination", q.Paginator)
+	breadcrumbs := []models.Breadcrumb{}
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/", "Home"})
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"/versions", "Versions"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	return c.Render(200, r.Auto(c, versions))
 }
@@ -118,6 +122,10 @@ func (v VersionsResource) Create(c buffalo.Context) error {
 		return errors.WithStack(err)
 	}
 
+	breadcrumbs := version.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "New"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
 	if !ok {
@@ -162,6 +170,10 @@ func (v VersionsResource) Edit(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	breadcrumbs := version.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Edit"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	return c.Render(200, r.Auto(c, version))
 }
 
@@ -176,6 +188,10 @@ func (v VersionsResource) Update(c buffalo.Context) error {
 
 	// Allocate an empty Version
 	version := &models.Version{}
+
+	breadcrumbs := version.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Update"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	if err := tx.Find(version, c.Param("version_id")); err != nil {
 		return c.Error(404, err)
@@ -218,6 +234,10 @@ func (v VersionsResource) Destroy(c buffalo.Context) error {
 
 	// Allocate an empty Version
 	version := &models.Version{}
+
+	breadcrumbs := version.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Destroy"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	// To find the Version the parameter version_id is used.
 	if err := tx.Find(version, c.Param("version_id")); err != nil {
