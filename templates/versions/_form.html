@@ -1,6 +1,25 @@
 <%= f.HiddenTag("EventID") %>
-<%= f.InputTag("Name") %>
-<%= f.InputTag("Output") %>
+<div class="form-group">
+    <label>Name</label>
+    <input class=" form-control" id="version-Name" name="Name" type="text" value="<%= version.Name %>">
+    <small>example: 1.0, 2.0, 3.1</small>
+</div>
+<!-- <%= f.InputTag("Output") %> -->
+
 <%= f.TextAreaTag("Schema", {rows: 10}) %>
 <%= f.SelectTag("Status", {options: {"Active": "1", "Inactive": "-1"}}) %>
+<br>
+<div class="form-group">
+    <label>
+        <input class="" id="version-Output-gcs" name="OutputGcs" type="checkbox" value="true" checked="">
+        Store to Google Cloud Storage
+    </label>
+</div>
+<div class="form-group">
+    <label>
+        <input class="" id="version-Output-Bq" name="OutputBq" type="checkbox" value="true" checked="">
+        Store to Google BigQuery
+    </label>
+</div>
+
 <button class="btn btn-success" role="submit">Save</button>

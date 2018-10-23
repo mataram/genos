@@ -1,6 +1,8 @@
 package actions
 
 import (
+	"net/http"
+
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
 	"github.com/gobuffalo/uuid"
@@ -170,6 +172,9 @@ func (v VersionsResource) Edit(c buffalo.Context) error {
 		return c.Error(404, err)
 	}
 
+	tx.Find(&version.Event, c.Param("event_id"))
+	tx.Find(&version.Event.Service, version.Event.ServiceID)
+
 	breadcrumbs := version.GetBreadcumbs()
 	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Edit"})
 	c.Set("breadcrumbs", breadcrumbs)
@@ -251,6 +256,6 @@ func (v VersionsResource) Destroy(c buffalo.Context) error {
 	// If there are no errors set a flash message
 	c.Flash().Add("success", "Version was destroyed successfully")
 
-	// Redirect to the versions index page
-	return c.Render(200, r.Auto(c, version))
+	// Redirect to the events index page
+	return c.Redirect(http.StatusFound, "/services/"+c.Param("service_id")+"/events/"+c.Param("event_id"))
 }
