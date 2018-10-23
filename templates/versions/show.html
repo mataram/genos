@@ -5,7 +5,7 @@
 <ul class="list-unstyled list-inline">
   <li class="list-inline-item"><a href="<%= serviceEventPath({ service_id: version.Event.ServiceID, event_id: version.Event.ID }) %>" class="btn btn-info">Back to all Versions</a></li>
   <li class="list-inline-item"><a href="<%= editServiceEventVersionPath({ service_id: version.Event.ServiceID, event_id: version.Event.ID, version_id: version.ID })%>" class="btn btn-warning">Edit</a></li>
-  <li class="list-inline-item"><a href="<%= serviceEventVersionsPath({ service_id: version.Event.ServiceID, event_id: version.Event.ID, version_id: version.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+  <li class="list-inline-item"><a href="/services/<%= version.Event.ServiceID %>/events/<%= version.Event.ID %>/versions/<%= version.ID %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
 </ul>
 
 <p>
@@ -18,5 +18,10 @@
   <strong>Schema</strong>: <%= version.Schema %>
 </p>
 <p>
-  <strong>Status</strong>: <%= version.Status %>
+  <strong>Schema</strong>:
+  <%= if (version.Status == 1) { %>
+    <td>Active</td>
+  <% } else { %>
+    <td>Inactive</td>
+  <% } %>
 </p>
