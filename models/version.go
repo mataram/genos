@@ -19,6 +19,7 @@ type Version struct {
 	Status    int       `json:"status" db:"status"`
 	EventID   uuid.UUID `json:"event_id" db:"event_id"`
 	Event     Event     `belongs_to:"event"`
+	Fields    Fields    `has_many:"fields" order_by:"name asc"`
 }
 
 func (e Version) GetBreadcumbs() []Breadcrumb {

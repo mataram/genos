@@ -5,6 +5,7 @@ create_table("fields") {
 	t.Column("type", "string", {})
 	t.Column("allow_null", "string", {})
 	t.Column("description", "text", {"null": true})
+	t.Column("index", "integer", {"null": true, "default": 0})
 	t.ForeignKey("version_id", {"versions": ["id"]}, {"on_delete": "cascade"})
 }
 add_index("fields", ["name", "version_id"], {})

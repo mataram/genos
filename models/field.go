@@ -18,6 +18,7 @@ type Field struct {
 	Type        string       `json:"type" db:"type"`
 	AllowNull   string       `json:"allow_null" db:"allow_null"`
 	Description nulls.String `json:"description" db:"description"`
+	Index       int          `json:"index" db:"index"`
 	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
 }
