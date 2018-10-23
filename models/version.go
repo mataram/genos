@@ -16,7 +16,6 @@ type Version struct {
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	Name      string    `json:"name" db:"name"`
 	Output    string    `json:"output" db:"output"`
-	Schema    string    `json:"schema" db:"schema"`
 	Status    int       `json:"status" db:"status"`
 	EventID   uuid.UUID `json:"event_id" db:"event_id"`
 	Event     Event     `belongs_to:"event"`
