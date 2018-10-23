@@ -5,19 +5,21 @@ import (
 	"time"
 
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/pop/nulls"
 	"github.com/gobuffalo/uuid"
 	"github.com/gobuffalo/validate"
 	"github.com/gobuffalo/validate/validators"
 )
 
 type Field struct {
-	ID          uuid.UUID `json:"id" db:"id"`
-	CreatedAt   time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
-	Name        string    `json:"name" db:"name"`
-	Type        string    `json:"type" db:"type"`
-	AllowNull   string    `json:"allow_null" db:"allow_null"`
-	Description text      `json:"description" db:"description"`
+	ID          uuid.UUID    `json:"id" db:"id"`
+	VersionID   uuid.UUID    `json:"version_id" db:"version_id"`
+	Name        string       `json:"name" db:"name"`
+	Type        string       `json:"type" db:"type"`
+	AllowNull   string       `json:"allow_null" db:"allow_null"`
+	Description nulls.String `json:"description" db:"description"`
+	CreatedAt   time.Time    `json:"created_at" db:"created_at"`
+	UpdatedAt   time.Time    `json:"updated_at" db:"updated_at"`
 }
 
 // String is not required by pop and may be deleted

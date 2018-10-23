@@ -2,7 +2,7 @@ create_table("versions") {
 	t.Column("id", "uuid", {"primary": true})
 	t.Column("name", "string", {"size": 10})
 	t.Column("event_id", "uuid", {})
-	t.Column("output", "string", {default : "{\"gcs\", \"bq\"}"})
+	t.Column("output", "string", {default : "[\"gcs\", \"bq\"]"})
 	t.Column("status", "integer", {})
 	t.ForeignKey("event_id", {"events": ["id"]}, {"on_delete": "cascade"})
 }

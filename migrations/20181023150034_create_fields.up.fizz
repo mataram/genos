@@ -1,6 +1,7 @@
 create_table("fields") {
 	t.Column("id", "uuid", {"primary": true})
 	t.Column("name", "string", {})
+	t.Column("version_id", "uuid", {})
 	t.Column("type", "string", {})
 	t.Column("allow_null", "string", {})
 	t.Column("description", "text", {"null": true})
