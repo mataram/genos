@@ -1,0 +1,22 @@
+<div class="page-header">
+  <h1>Field#Show</h1>
+</div>
+
+<ul class="list-unstyled list-inline">
+  <li class="list-inline-item"><a href="<%= fieldsPath() %>" class="btn btn-info">Back to all Fields</a></li>
+  <li class="list-inline-item"><a href="<%= editFieldPath({ field_id: field.ID })%>" class="btn btn-warning">Edit</a></li>
+  <li class="list-inline-item"><a href="<%= fieldPath({ field_id: field.ID })%>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+</ul>
+
+<p>
+  <strong>Name</strong>: <%= field.Name %>
+</p>
+<p>
+  <strong>Type</strong>: <%= field.Type %>
+</p>
+<p>
+  <strong>AllowNull</strong>: <%= field.AllowNull %>
+</p>
+<p>
+  <strong>Description</strong>: <%= field.Description %>
+</p>
