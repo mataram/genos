@@ -54,7 +54,6 @@ func (v *Version) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.Validate(
 		&validators.StringIsPresent{Field: v.Name, Name: "Name"},
 		&validators.StringIsPresent{Field: v.Output, Name: "Output"},
-		&validators.StringIsPresent{Field: v.Schema, Name: "Schema"},
 		&validators.IntIsPresent{Field: v.Status, Name: "Status"},
 	), nil
 }
