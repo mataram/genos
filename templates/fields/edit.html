@@ -1,0 +1,8 @@
+<div class="page-header">
+  <h1>Edit Field</h1>
+</div>
+
+<%= form_for(field, {action: serviceEventVersionFieldPath({ service_id: field.Version.Event.ServiceID, event_id: field.Version.Event.ID, version_id: field.Version.ID, field_id: field.ID }), method: "PUT"}) { %>
+  <%= partial("fields/form.html") %>
+  <a href="<%= serviceEventVersionFieldsPath({ service_id: field.Version.Event.ServiceID, event_id: field.Version.Event.ID, version_id: field.Version.ID, field_id: field.ID }) %>" class="btn btn-warning" data-confirm="Are you sure?">Cancel</a>
+<% } %>

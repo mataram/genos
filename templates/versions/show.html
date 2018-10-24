@@ -15,13 +15,44 @@
   <strong>Output</strong>: <%= version.Output %>
 </p>
 <p>
-  <strong>Schema</strong>: <%= version.Schema %>
-</p>
-<p>
-  <strong>Schema</strong>:
+  <strong>Status</strong>:
   <%= if (version.Status == 1) { %>
     <td>Active</td>
   <% } else { %>
     <td>Inactive</td>
   <% } %>
 </p>
+
+<div class="page-header">
+    <h1>Fields</h1>
+  </div>
+  <ul class="list-unstyled list-inline">
+    <li><a href="<%= newServiceEventVersionFieldsPath({ service_id: version.Event.ServiceID, event_id: version.Event.ID, version_id: version.ID }) %>" class="btn btn-primary">Create New Field</a></li>
+  </ul>
+  
+  <table class="table table-striped">
+    <thead>
+    <th>Name</th>
+      <th>Type</th>
+      <th>AllowNull</th>
+      <th>Description</th>
+      <th>&nbsp;</th>
+    </thead>
+    <tbody>
+      <%= for (field) in version.Fields { %>
+        <tr>
+        <td><%= field.Name %></td>
+          <td><%= field.Type %></td>
+          <td><%= field.AllowNull %></td>
+          <td><%= field.Description %></td>
+          <td>
+            <div class="pull-right">
+              <a href="<%= serviceEventVersionFieldPath({ service_id: version.Event.ServiceID, event_id: version.Event.ID, version_id: version.ID, field_id: field.ID }) %>" class="btn btn-info">View</a>
+              <a href="<%= editServiceEventVersionFieldPath({ service_id: version.Event.ServiceID, event_id: version.Event.ID, version_id: version.ID, field_id: field.ID }) %>" class="btn btn-warning">Edit</a>
+              <a href="<%= serviceEventVersionFieldPath({ service_id: version.Event.ServiceID, event_id: version.Event.ID, version_id: version.ID, field_id: field.ID }) %>" data-method="DELETE" data-confirm="Are you sure?" class="btn btn-danger">Destroy</a>
+            </div>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>

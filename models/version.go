@@ -16,10 +16,10 @@ type Version struct {
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 	Name      string    `json:"name" db:"name"`
 	Output    string    `json:"output" db:"output"`
-	Schema    string    `json:"schema" db:"schema"`
 	Status    int       `json:"status" db:"status"`
 	EventID   uuid.UUID `json:"event_id" db:"event_id"`
 	Event     Event     `belongs_to:"event"`
+	Fields    Fields    `has_many:"fields" order_by:"name asc"`
 }
 
 func (e Version) GetBreadcumbs() []Breadcrumb {
@@ -55,7 +55,6 @@ func (v *Version) Validate(tx *pop.Connection) (*validate.Errors, error) {
 	return validate.Validate(
 		&validators.StringIsPresent{Field: v.Name, Name: "Name"},
 		&validators.StringIsPresent{Field: v.Output, Name: "Output"},
-		&validators.StringIsPresent{Field: v.Schema, Name: "Schema"},
 		&validators.IntIsPresent{Field: v.Status, Name: "Status"},
 	), nil
 }

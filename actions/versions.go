@@ -80,6 +80,8 @@ func (v VersionsResource) Show(c buffalo.Context) error {
 	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Show"})
 	c.Set("breadcrumbs", breadcrumbs)
 
+	tx.Load(version)
+
 	return c.Render(200, r.Auto(c, version))
 }
 
@@ -118,6 +120,19 @@ func (v VersionsResource) New(c buffalo.Context) error {
 func (v VersionsResource) Create(c buffalo.Context) error {
 	// Allocate an empty Version
 	version := &models.Version{}
+
+	output := "["
+
+	if c.Param("OutputGcs") == "true" {
+		output = output + "\"gcs\""
+	}
+
+	if c.Param("OutputBq") == "true" {
+		output = output + ",\"bq\""
+	}
+
+	output = output + "]"
+	version.Output = output
 
 	// Bind version to the html form elements
 	if err := c.Bind(version); err != nil {
