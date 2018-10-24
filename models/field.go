@@ -32,7 +32,7 @@ func (e Field) GetBreadcumbs() []Breadcrumb {
 	breadcrumbs = append(breadcrumbs, Breadcrumb{"#", "Events"})
 	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services/" + e.Version.Event.ServiceID.String() + "/events/" + e.Version.EventID.String(), e.Version.EventID.String()})
 	breadcrumbs = append(breadcrumbs, Breadcrumb{"#", "Versions"})
-	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services/" + e.Version.Event.ServiceID.String() + "/events/" + e.Version.EventID.String() + "versions/", e.Version.ID.String()})
+	breadcrumbs = append(breadcrumbs, Breadcrumb{"/services/" + e.Version.Event.ServiceID.String() + "/events/" + e.Version.EventID.String() + "/versions/" + e.VersionID.String(), e.Version.ID.String()})
 	breadcrumbs = append(breadcrumbs, Breadcrumb{"#", "Fields"})
 	return breadcrumbs
 
