@@ -3,7 +3,7 @@ create_table("fields") {
 	t.Column("name", "string", {})
 	t.Column("version_id", "uuid", {})
 	t.Column("type", "string", {})
-	t.Column("allow_null", "string", {})
+	t.Column("allow_null", "bool", {"default": true})
 	t.Column("description", "text", {"null": true})
 	t.Column("index", "integer", {"null": true, "default": 0})
 	t.ForeignKey("version_id", {"versions": ["id"]}, {"on_delete": "cascade"})

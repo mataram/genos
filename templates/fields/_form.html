@@ -1,6 +1,14 @@
+<%= f.HiddenTag("VersionID") %>
 <%= f.InputTag("Name") %>
-<%= f.InputTag("Type") %>
-<%= f.InputTag("AllowNull") %>
+<%= f.SelectTag("Type", {options: [
+    {"String": "string"},
+    {"Integer": "int"},
+    {"Long": "long"},
+    {"Float": "float"},
+    {"Double": "double"}
+    ]}
+) %>
+<%= f.SelectTag("AllowNull", {options: {"True": true, "False": false}}) %>
 <%= f.InputTag("Description") %>
 <%= f.InputTag("Index") %>
 <button class="btn btn-success" role="submit">Save</button>

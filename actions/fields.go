@@ -3,6 +3,7 @@ package actions
 import (
 	"github.com/gobuffalo/buffalo"
 	"github.com/gobuffalo/pop"
+	"github.com/gobuffalo/uuid"
 	"github.com/mataram/genos/models"
 	"github.com/pkg/errors"
 )
@@ -62,6 +63,10 @@ func (v FieldsResource) Show(c buffalo.Context) error {
 	// Allocate an empty Field
 	field := &models.Field{}
 
+	breadcrumbs := field.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "Show"})
+	c.Set("breadcrumbs", breadcrumbs)
+
 	// To find the Field the parameter field_id is used.
 	if err := tx.Find(field, c.Param("field_id")); err != nil {
 		return c.Error(404, err)
@@ -73,7 +78,32 @@ func (v FieldsResource) Show(c buffalo.Context) error {
 // New renders the form for creating a new Field.
 // This function is mapped to the path GET /fields/new
 func (v FieldsResource) New(c buffalo.Context) error {
-	return c.Render(200, r.Auto(c, &models.Field{}))
+	tx, ok := c.Value("tx").(*pop.Connection)
+	if !ok {
+		return errors.WithStack(errors.New("no transaction found"))
+	}
+
+	field := &models.Field{}
+	field.AllowNull = true
+	versionId, err := uuid.FromString(c.Param("version_id"))
+	if err == nil {
+		field.VersionID = versionId
+	} else {
+		return errors.WithStack(err)
+	}
+
+	// To find the Event the parameter event_id is used.
+	if err := tx.Find(&field.Version, c.Param("version_id")); err != nil {
+		return c.Error(404, err)
+	}
+
+	// tx.Find(&version.Event.Service, version.Event.ServiceID)
+	tx.Find(&field.Version.Event, field.Version.EventID)
+	breadcrumbs := field.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "New"})
+	c.Set("breadcrumbs", breadcrumbs)
+
+	return c.Render(200, r.Auto(c, field))
 }
 
 // Create adds a Field to the DB. This function is mapped to the
@@ -86,6 +116,10 @@ func (v FieldsResource) Create(c buffalo.Context) error {
 	if err := c.Bind(field); err != nil {
 		return errors.WithStack(err)
 	}
+
+	breadcrumbs := field.GetBreadcumbs()
+	breadcrumbs = append(breadcrumbs, models.Breadcrumb{"#", "New"})
+	c.Set("breadcrumbs", breadcrumbs)
 
 	// Get the DB connection from the context
 	tx, ok := c.Value("tx").(*pop.Connection)
